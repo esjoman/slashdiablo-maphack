@@ -8,10 +8,12 @@ using namespace Drawing;
 
 void ScreenInfo::OnLoad() {
 	automapInfo = BH::config->ReadArray("AutomapInfo");
-	bhText = new Texthook(Perm, 790, 6, "ÿc4BH v0.1.5 (SlashDiablo Branch)");
+	isHiRes = BH::config->ReadBoolean("Res1300x700", false);
+	int xpos = isHiRes ? 1290 : 790;
+	bhText = new Texthook(Perm, xpos, 6, "ÿc4BH v0.1.5 HD (SlashDiablo 1.13d)");
 	bhText->SetAlignment(Right);
 	if (BH::cGuardLoaded) {
-		Texthook* cGuardText = new Texthook(Perm, 790, 23, "ÿc4cGuard Loaded");
+		Texthook* cGuardText = new Texthook(Perm, xpos, 23, "ÿc4cGuard Loaded");
 		cGuardText->SetAlignment(Right);
 	}
 	gameTimer = GetTickCount();
@@ -126,7 +128,8 @@ void ScreenInfo::OnDraw() {
 	}
 
 	for (std::deque<StateWarning*>::iterator it = CurrentWarnings.begin(); it != CurrentWarnings.end(); ++it) {
-		Texthook::Draw(400, 30 * (yOffset++), Center, 3, Red, "%s has expired!", (*it)->name.c_str());
+		int xpos = isHiRes ? 650 : 400;
+		Texthook::Draw(xpos, 30 * (yOffset++), Center, 3, Red, "%s has expired!", (*it)->name.c_str());
 	}
 
 	// It's a kludge to peek into other modules for config info, but it just seems silly to
@@ -206,8 +209,10 @@ void ScreenInfo::OnAutomapDraw() {
 			else
 				key.replace(key.find("%" + automap[n].key + "%"), automap[n].key.length() + 2, automap[n].value);
 		}
-		if (key.length() > 0)
-			Texthook::Draw(790, (y+=16), Right,0,Gold,"%s", key.c_str());
+		if (key.length() > 0) {
+			int xpos = isHiRes ? 1290 : 790;
+			Texthook::Draw(xpos, (y+=16), Right,0,Gold,"%s", key.c_str());
+		}
 	}
 
 	delete [] level;

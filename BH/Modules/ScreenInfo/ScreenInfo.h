@@ -29,6 +29,7 @@ class ScreenInfo : public Module {
 		std::deque<StateWarning*> CurrentWarnings;
 		Drawing::Texthook* bhText;
 		DWORD gameTimer;
+		bool isHiRes;
 
 		int packetRequests;
 		ULONGLONG warningTicks;

@@ -63,7 +63,7 @@ bool BH::Startup(HINSTANCE instance, VOID* reserved) {
 		BH::OldWNDPROC = (WNDPROC)GetWindowLong(D2GFX_GetHwnd(),GWL_WNDPROC);
 		SetWindowLong(D2GFX_GetHwnd(),GWL_WNDPROC,(LONG)GameWindowEvent);
 	}
-
+	
 	settingsUI = new Drawing::UI("Settings", 350, 200);
 	statsDisplay = new Drawing::StatsDisplay("Stats");
 
@@ -76,6 +76,7 @@ bool BH::Startup(HINSTANCE instance, VOID* reserved) {
 	new AutoTele();
 	new Party();
 	new ItemMover();
+	new Resolution();
 
 	moduleManager->LoadModules();
 

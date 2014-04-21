@@ -1,13 +1,17 @@
 slashdiablo-maphack
 ===================
 
+This new version is only compatible with 1.13D.
+
+It introduces a new feature: enabling 1300x700 resolution.
+
+_______________________
+
 A customized maphack for reddit's slashdiablo D2 server
 
 This maphack is based on BH maphack, written by McGod from the blizzhackers
 forum. It was extensively customized for the slashdiablo realm by Deadlock39,
 who created versions 0.1.1 and 0.1.2.
-
-Currently works with client version 1.13C.
 
 Major features include:
 
@@ -31,7 +35,3 @@ Major features include:
 * Warnings when buffs expire (see "Skill Warning" in config file)
 
 The hotkeys for all features can be changed in the config file.
-
-Github no longer offers binary downloads, so to get the latest release
-(currently v0.1.5) or any older release go to
-http://bitly.com/bundles/underbent/1.

@@ -84,6 +84,7 @@ int main(int argc, const char* argv[]) {
 	//Print intro and the beginning of the menu.
 	printf("BH v0.1.5 By McGod\n");
 	printf("SlashDiablo Branch: Edited By Deadlock, underbent\n");
+	printf("Updated to 1.13d with 1300x700 resolution fix -- by TravHatesMe\n");
 	printf("Visit http://www.reddit.com/r/slashdiablo for updates!\n");
 	printf("\n");
 	printf("Command-line parameters:\n");
