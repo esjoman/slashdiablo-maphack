@@ -131,34 +131,34 @@ void ScreenInfo::OnDraw() {
 
 	// It's a kludge to peek into other modules for config info, but it just seems silly to
 	// create a new UI tab for each module with config parameters.
-	if ((*BH::MiscToggles)["Quest Drop Warning"].state) {
-		char *bossNames[3] = {"Mephisto", "Diablo", "Baal"};
-		int xpac = pData->nCharFlags & PLAYER_TYPE_EXPANSION;
-		int doneDuriel = D2COMMON_GetQuestFlag2(quests, THE_SEVEN_TOMBS, QFLAG_REWARD_GRANTED);
-		int doneMephisto = D2COMMON_GetQuestFlag2(quests, THE_GUARDIAN, QFLAG_REWARD_GRANTED);
-		int doneDiablo = D2COMMON_GetQuestFlag2(quests, TERRORS_END, QFLAG_REWARD_GRANTED);
-		int doneBaal = D2COMMON_GetQuestFlag2(quests, EVE_OF_DESTRUCTION, QFLAG_REWARD_GRANTED);
-		int startedMephisto = D2COMMON_GetQuestFlag2(quests, THE_GUARDIAN, QFLAG_QUEST_STARTED);
-		int startedDiablo = D2COMMON_GetQuestFlag2(quests, TERRORS_END, QFLAG_QUEST_STARTED);
-		int startedBaal = D2COMMON_GetQuestFlag2(quests, EVE_OF_DESTRUCTION, QFLAG_QUEST_STARTED);
+	//if ((*BH::MiscToggles)["Quest Drop Warning"].state) {
+	//	char *bossNames[3] = {"Mephisto", "Diablo", "Baal"};
+	//	int xpac = pData->nCharFlags & PLAYER_TYPE_EXPANSION;
+	//	int doneDuriel = D2COMMON_GetQuestFlag2(quests, THE_SEVEN_TOMBS, QFLAG_REWARD_GRANTED);
+	//	int doneMephisto = D2COMMON_GetQuestFlag2(quests, THE_GUARDIAN, QFLAG_REWARD_GRANTED);
+	//	int doneDiablo = D2COMMON_GetQuestFlag2(quests, TERRORS_END, QFLAG_REWARD_GRANTED);
+	//	int doneBaal = D2COMMON_GetQuestFlag2(quests, EVE_OF_DESTRUCTION, QFLAG_REWARD_GRANTED);
+	//	int startedMephisto = D2COMMON_GetQuestFlag2(quests, THE_GUARDIAN, QFLAG_QUEST_STARTED);
+	//	int startedDiablo = D2COMMON_GetQuestFlag2(quests, TERRORS_END, QFLAG_QUEST_STARTED);
+	//	int startedBaal = D2COMMON_GetQuestFlag2(quests, EVE_OF_DESTRUCTION, QFLAG_QUEST_STARTED);
 
-		int warning = -1;
-		if (doneDuriel && startedMephisto && !doneMephisto && !MephistoBlocked) {
-			warning = 0;
-		} else if (doneMephisto && startedDiablo && !doneDiablo && !DiabloBlocked) {
-			warning = 1;
-		} else if (xpac && doneDiablo && startedBaal && !doneBaal && !BaalBlocked) {
-			warning = 2;
-		}
-		if (warning >= 0) {
-			ms = ticks - warningTicks;
-			if (ms > 2000) {
-				warningTicks = ticks;
-			} else if (ms > 500) {
-				Texthook::Draw(400, 30 * (yOffset++), Center, 3, Red, "%s Quest Active", bossNames[warning]);
-			}
-		}
-	}
+	//	int warning = -1;
+	//	if (doneDuriel && startedMephisto && !doneMephisto && !MephistoBlocked) {
+	//		warning = 0;
+	//	} else if (doneMephisto && startedDiablo && !doneDiablo && !DiabloBlocked) {
+	//		warning = 1;
+	//	} else if (xpac && doneDiablo && startedBaal && !doneBaal && !BaalBlocked) {
+	//		warning = 2;
+	//	}
+	//	if (warning >= 0) {
+	//		ms = ticks - warningTicks;
+	//		if (ms > 2000) {
+	//			warningTicks = ticks;
+	//		} else if (ms > 500) {
+	//			Texthook::Draw(400, 30 * (yOffset++), Center, 3, Red, "%s Quest Active", bossNames[warning]);
+	//		}
+	//	}
+	//}
 }
 
 void ScreenInfo::OnAutomapDraw() {

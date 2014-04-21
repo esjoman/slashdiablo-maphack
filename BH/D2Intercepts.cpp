@@ -7,7 +7,6 @@ VOID __declspec(naked) GameDraw_Interception()
 	{
 		call GameDraw;
 
-		POP ESI
 		POP EBX
 		POP ECX
 		RETN 4
@@ -90,11 +89,11 @@ VOID __declspec(naked) ChatPacketRecv_Interception()
       jnz oldCall;
 
         MOV EAX,0;
-      MOV DWORD PTR DS:[EBX+0x6FF3ED58],1
+      MOV DWORD PTR DS:[EBX+0x6FF3F100],1
       ret;
 oldCall:
         CALL eax;
-        MOV DWORD PTR DS:[EBX+0x6FF3ED58],1
+        MOV DWORD PTR DS:[EBX+0x6FF3F100],1
         ret;
 
    }
@@ -169,7 +168,7 @@ void __declspec(naked) ChannelWhisper_Interception(void)
 		pop edx
 		pop ecx
 
-		jnz SkipWhisper
+		jz SkipWhisper
 		jmp D2MULTI_ChannelWhisper_I
 
 SkipWhisper:
@@ -192,8 +191,8 @@ void __declspec(naked) ChannelChat_Interception(void)
 		pop edx
 		pop ecx
 
-		jnz SkipChat
-		sub esp, 0x408
+		jz SkipChat
+		sub esp, 0x308
 		jmp D2MULTI_ChannelChat_I
 
 SkipChat:
@@ -216,7 +215,7 @@ void __declspec(naked) ChannelEmote_Interception(void)
 		pop edx
 		pop ecx
 
-		jnz SkipChat
+		jz SkipChat
 		sub esp, 0x4F8
 		jmp D2MULTI_ChannelEmote_I
 
