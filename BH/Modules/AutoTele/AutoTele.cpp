@@ -24,11 +24,15 @@ void AutoTele::OnLoad() {
 	Toggles["Quest Drop Warning"] = BH::config->ReadToggle("Quest Drop Warning", "None", false);
 
 	Toggles["Toggle Resolution"] = BH::config->ReadToggle("Toggle Resolution", "VK_6", false);
-
+/*
 	NextKey = BH::config->ReadKey("Next Tele", "VK_NUMPAD0");
 	OtherKey = BH::config->ReadKey("Other Tele", "VK_NUMPAD1");
 	WPKey = BH::config->ReadKey("Waypoint Tele", "VK_NUMPAD2");
-	PrevKey = BH::config->ReadKey("Prev Tele", "VK_NUMPAD3");
+	PrevKey = BH::config->ReadKey("Prev Tele", "VK_NUMPAD3");*/
+	NextKey = BH::config->ReadKey("Next Tele", "");
+	OtherKey = BH::config->ReadKey("Other Tele", "");
+	WPKey = BH::config->ReadKey("Waypoint Tele", "");
+	PrevKey = BH::config->ReadKey("Prev Tele", "");
 	Colors[0] = BH::config->ReadInt("Path Color", 97);
 	Colors[1] = BH::config->ReadInt("Next Color", 0x97);
 	Colors[2] = BH::config->ReadInt("Other Color", 0x0A);

@@ -37,7 +37,7 @@ void Resolution::SetResolution(int x, int y) {
 	*p_D2CLIENT_MapPosY = y - 40; // subtract 40 to correct offsets
 	D2CLIENT_ResizeDiablo();
 	//raise resolution changed event so that other modules can readjust positions
-	//__raise BH::moduleManager->OnResolutionChanged(x, y);
+	__raise BH::moduleManager->OnResolutionChanged(x, y);
 }
 
 void Resolution::OnKey(bool up, BYTE key, LPARAM lParam, bool* block) {
@@ -45,9 +45,12 @@ void Resolution::OnKey(bool up, BYTE key, LPARAM lParam, bool* block) {
 		return;
 	if (key == ((*BH::MiscToggles)["Toggle Resolution"].toggle)) {
 		*block = true;
-		if (up && !((*BH::MiscToggles)["Toggle Resolution"].state)) {
-			(*BH::MiscToggles)["Toggle Resolution"].state = true;
-			this->SetResolution(newWidth, newHeight);
+		if (up) {
+			bool isLoaded = (*BH::MiscToggles)["Toggle Resolution"].state;
+			if (!isLoaded) {
+				this->SetResolution(newWidth, newHeight);
+				(*BH::MiscToggles)["Toggle Resolution"].state = true;
+			}			
 		}
 	}
 }
@@ -65,6 +68,6 @@ void Resolution::OnGameExit() {
 	isInGame = false;
 	//raise resolution changed event so that other modules can readjust positions
 	if ((*BH::MiscToggles)["Toggle Resolution"].state) {
-		//__raise BH::moduleManager->OnResolutionChanged(800, 600);
+		__raise BH::moduleManager->OnResolutionChanged(800, 600);
 	}
 }
