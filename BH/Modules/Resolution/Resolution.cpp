@@ -7,7 +7,10 @@
 using namespace std;
 
 void Resolution::OnLoad() {
-	use1300x700 = BH::config->ReadBoolean("Res1300x700", false);
+	isLoaded = false;
+	isInGame = false;
+	newWidth = BH::config->ReadInt("New Width", 1300);
+	newHeight = BH::config->ReadInt("New Height", 700);
 }
 
 void Resolution::OnUnload() {
@@ -34,11 +37,36 @@ void SetResolution(int x, int y) {
 	*p_D2CLIENT_ScreenSizeY = *p_D2CLIENT_SizeY1 = y;
 	*p_D2CLIENT_MapPosY = y - 40; // subtract 40 to correct offsets
 	D2CLIENT_ResizeDiablo();
-	
+	//raise resolution changed event so that other modules can readjust positions
+	__raise BH::moduleManager->OnResolutionChanged(x, y);
+}
+
+void Resolution::OnKey(bool up, BYTE key, LPARAM lParam, bool* block) {
+	if (!isInGame)
+		return;
+	if (key == ((*BH::MiscToggles)["Toggle Resolution"].toggle)) {
+		*block = true;
+		if (up && !isLoaded) {
+			(*BH::MiscToggles)["Toggle Resolution"].state = true;
+			SetResolution(newWidth, newHeight);
+		}
+	}
 }
 
 void Resolution::OnGameJoin(const string& name, const string& pass, int diff) {
-	if (use1300x700) {
-		SetResolution(1300, 700);
+	isLoaded = false;
+	isInGame = true;
+	//if the user has already toggled it from a previous game, autoload it
+	if (((*BH::MiscToggles)["Toggle Resolution"].state)
+		&& newWidth > 0 && newHeight > 0) {
+		SetResolution(newWidth, newHeight);
 	}
+}
+
+void Resolution::OnGameExit() {
+	isLoaded = false;
+	isInGame = false;
+
+	//raise resolution changed event so that other modules can readjust positions
+	__raise BH::moduleManager->OnResolutionChanged(800, 600);
 }

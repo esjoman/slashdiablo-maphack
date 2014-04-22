@@ -23,6 +23,8 @@ void AutoTele::OnLoad() {
 	Toggles["Fast Teleport"] = BH::config->ReadToggle("Fast Teleport", "None", true);
 	Toggles["Quest Drop Warning"] = BH::config->ReadToggle("Quest Drop Warning", "None", false);
 
+	Toggles["Toggle Resolution"] = BH::config->ReadToggle("Toggle Resolution", "VK_6", false);
+
 	NextKey = BH::config->ReadKey("Next Tele", "VK_NUMPAD0");
 	OtherKey = BH::config->ReadKey("Other Tele", "VK_NUMPAD1");
 	WPKey = BH::config->ReadKey("Waypoint Tele", "VK_NUMPAD2");
@@ -33,11 +35,24 @@ void AutoTele::OnLoad() {
 	Colors[3] = BH::config->ReadInt("WP Color", 0x84);
 	Colors[4] = BH::config->ReadInt("Prev Color", 0x5B);
 
+	int width = BH::config->ReadInt("New Width", 1300);
+	int height = BH::config->ReadInt("New Height", 700);
+	
+
 	new Texthook(settingsTab, 60, 12, "Toggles");
 
 	new Checkhook(settingsTab, 40, 27, &Toggles["Draw Destination"].state, "Draw Paths");
 
-	new Checkhook(settingsTab, 40, 57, &Toggles["Quest Drop Warning"].state, "Quest Drop Warning");
+	new Checkhook(settingsTab, 40, 43, &Toggles["Quest Drop Warning"].state, "Quest Drop Warning");
+	
+	std::string newW = to_string(width);
+	std::string newH = to_string(height);
+	std::string resStr = "Toggle " + newW + "x" + newH;
+
+	new Keyhook(settingsTab, 40, 102, &Toggles["Toggle Resolution"].toggle, resStr);
+
+	new Texthook(settingsTab, 40, 117, "Warning: Toggling resolution may");
+	new Texthook(settingsTab, 40, 132, "initially result in a game crash.");
 
 	//this doesn't change the path.  I can't figure out how to make it work either.
 	//new Checkhook(settingsTab, 40, 42, &Toggles["CP to cave"].state, "CP to cave");

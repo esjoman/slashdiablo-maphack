@@ -7,9 +7,8 @@
 using namespace Drawing;
 
 void ScreenInfo::OnLoad() {
+	xpos = 790;
 	automapInfo = BH::config->ReadArray("AutomapInfo");
-	isHiRes = BH::config->ReadBoolean("Res1300x700", false);
-	int xpos = isHiRes ? 1290 : 790;
 	bhText = new Texthook(Perm, xpos, 6, "ÿc4BH v0.1.5 HD (SlashDiablo 1.13d)");
 	bhText->SetAlignment(Right);
 	if (BH::cGuardLoaded) {
@@ -29,6 +28,11 @@ void ScreenInfo::OnLoad() {
 			}
 		}
 	}
+}
+
+void ScreenInfo::OnResolutionChanged(int newX, int newY) {
+	bhText->SetBaseX(newX - 10);
+	xpos = newX - 10;
 }
 
 void ScreenInfo::OnGameJoin(const string& name, const string& pass, int diff) {
@@ -128,7 +132,6 @@ void ScreenInfo::OnDraw() {
 	}
 
 	for (std::deque<StateWarning*>::iterator it = CurrentWarnings.begin(); it != CurrentWarnings.end(); ++it) {
-		int xpos = isHiRes ? 650 : 400;
 		Texthook::Draw(xpos, 30 * (yOffset++), Center, 3, Red, "%s has expired!", (*it)->name.c_str());
 	}
 
@@ -210,7 +213,6 @@ void ScreenInfo::OnAutomapDraw() {
 				key.replace(key.find("%" + automap[n].key + "%"), automap[n].key.length() + 2, automap[n].value);
 		}
 		if (key.length() > 0) {
-			int xpos = isHiRes ? 1290 : 790;
 			Texthook::Draw(xpos, (y+=16), Right,0,Gold,"%s", key.c_str());
 		}
 	}

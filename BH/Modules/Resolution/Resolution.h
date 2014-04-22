@@ -4,12 +4,16 @@
 
 class Resolution : public Module {
 private:
-	map<std::string, Toggle> Toggles;
-	bool use1300x700;
+	int newWidth;
+	int newHeight;
+	bool isLoaded;
+	bool isInGame;
 
 public:
 	Resolution() : Module("Resolution") {};
 	void OnLoad();
 	void OnUnload();
+	void OnKey(bool up, BYTE key, LPARAM lParam, bool* block);
 	void OnGameJoin(const string& name, const string& pass, int diff);
+	void OnGameExit();
 };
