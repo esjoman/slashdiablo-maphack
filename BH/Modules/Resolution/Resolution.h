@@ -6,8 +6,9 @@ class Resolution : public Module {
 private:
 	int newWidth;
 	int newHeight;
-	bool isLoaded;
 	bool isInGame;
+	void SetResolution(int x, int y);
+	int GetMode(int height);
 
 public:
 	Resolution() : Module("Resolution") {};

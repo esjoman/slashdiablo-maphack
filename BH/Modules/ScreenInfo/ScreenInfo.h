@@ -24,14 +24,13 @@ struct StateWarning {
 
 class ScreenInfo : public Module {
 	private:
-		int xpos;
 		std::vector<std::string> automapInfo;
 		std::map<DWORD, string> SkillWarningMap;
 		std::deque<StateWarning*> CurrentWarnings;
 		Drawing::Texthook* bhText;
 		DWORD gameTimer;
-		bool isHiRes;
 
+		int xpos;
 		int packetRequests;
 		ULONGLONG warningTicks;
 		ULONGLONG packetTicks;
@@ -43,10 +42,9 @@ class ScreenInfo : public Module {
 		ScreenInfo() :
 			Module("Screen Info"), warningTicks(BHGetTickCount()), packetRequests(0),
 			MephistoBlocked(false), DiabloBlocked(false), BaalBlocked(false), ReceivedQuestPacket(false) {};
-
-		void OnResolutionChanged(int newX, int newY);
-
+					
 		void OnLoad();
+		void OnResolutionChanged(int newX, int newY);
 		void OnGameJoin(const string& name, const string& pass, int diff);
 		void OnGameExit();
 

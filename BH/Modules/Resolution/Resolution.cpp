@@ -7,7 +7,6 @@
 using namespace std;
 
 void Resolution::OnLoad() {
-	isLoaded = false;
 	isInGame = false;
 	newWidth = BH::config->ReadInt("New Width", 1300);
 	newHeight = BH::config->ReadInt("New Height", 700);
@@ -16,7 +15,7 @@ void Resolution::OnLoad() {
 void Resolution::OnUnload() {
 }
 
-int GetMode(int height) {
+int Resolution::GetMode(int height) {
 	switch(height)
 	{
 		case 800:
@@ -28,7 +27,7 @@ int GetMode(int height) {
 }
 
 //Shaggi's resolution fix, all credits to him
-void SetResolution(int x, int y) {
+void Resolution::SetResolution(int x, int y) {
 	//GetMode(*p_D2CLIENT_ScreenSizeY);
 	int mode = GetMode(y);
 	*p_D2CLIENT_CropMode = 0;
@@ -38,7 +37,7 @@ void SetResolution(int x, int y) {
 	*p_D2CLIENT_MapPosY = y - 40; // subtract 40 to correct offsets
 	D2CLIENT_ResizeDiablo();
 	//raise resolution changed event so that other modules can readjust positions
-	__raise BH::moduleManager->OnResolutionChanged(x, y);
+	//__raise BH::moduleManager->OnResolutionChanged(x, y);
 }
 
 void Resolution::OnKey(bool up, BYTE key, LPARAM lParam, bool* block) {
@@ -46,27 +45,26 @@ void Resolution::OnKey(bool up, BYTE key, LPARAM lParam, bool* block) {
 		return;
 	if (key == ((*BH::MiscToggles)["Toggle Resolution"].toggle)) {
 		*block = true;
-		if (up && !isLoaded) {
+		if (up && !((*BH::MiscToggles)["Toggle Resolution"].state)) {
 			(*BH::MiscToggles)["Toggle Resolution"].state = true;
-			SetResolution(newWidth, newHeight);
+			this->SetResolution(newWidth, newHeight);
 		}
 	}
 }
 
 void Resolution::OnGameJoin(const string& name, const string& pass, int diff) {
-	isLoaded = false;
 	isInGame = true;
 	//if the user has already toggled it from a previous game, autoload it
 	if (((*BH::MiscToggles)["Toggle Resolution"].state)
 		&& newWidth > 0 && newHeight > 0) {
-		SetResolution(newWidth, newHeight);
+		this->SetResolution(newWidth, newHeight);
 	}
 }
 
 void Resolution::OnGameExit() {
-	isLoaded = false;
 	isInGame = false;
-
 	//raise resolution changed event so that other modules can readjust positions
-	__raise BH::moduleManager->OnResolutionChanged(800, 600);
+	if ((*BH::MiscToggles)["Toggle Resolution"].state) {
+		//__raise BH::moduleManager->OnResolutionChanged(800, 600);
+	}
 }
