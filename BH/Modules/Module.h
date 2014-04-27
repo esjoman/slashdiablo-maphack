@@ -27,8 +27,10 @@ class Module {
 
 		virtual void OnLoop() {};
 
+		virtual void OnResolutionChanged(int newX, int newY) {};
+
 		// Game Events
-		virtual void OnGameJoin(const string& name, const string& pass, int diff) {}
+		virtual void OnGameJoin(const string& name, const string& pass, int diff) {};
 		virtual void OnGameExit() {};
 
 		// Drawing Events

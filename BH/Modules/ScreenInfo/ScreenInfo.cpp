@@ -7,11 +7,12 @@
 using namespace Drawing;
 
 void ScreenInfo::OnLoad() {
+	xpos = 790;
 	automapInfo = BH::config->ReadArray("AutomapInfo");
-	bhText = new Texthook(Perm, 790, 6, "ÿc4BH v0.1.5 (SlashDiablo Branch)");
+	bhText = new Texthook(Perm, xpos, 6, "ÿc4BH v0.1.5 HD (SlashDiablo 1.13d)");
 	bhText->SetAlignment(Right);
 	if (BH::cGuardLoaded) {
-		Texthook* cGuardText = new Texthook(Perm, 790, 23, "ÿc4cGuard Loaded");
+		Texthook* cGuardText = new Texthook(Perm, xpos, 23, "ÿc4cGuard Loaded");
 		cGuardText->SetAlignment(Right);
 	}
 	gameTimer = GetTickCount();
@@ -27,6 +28,11 @@ void ScreenInfo::OnLoad() {
 			}
 		}
 	}
+}
+
+void ScreenInfo::OnResolutionChanged(int newX, int newY) {
+	bhText->SetBaseX(newX - 10);
+	xpos = newX - 10;
 }
 
 void ScreenInfo::OnGameJoin(const string& name, const string& pass, int diff) {
@@ -126,39 +132,39 @@ void ScreenInfo::OnDraw() {
 	}
 
 	for (std::deque<StateWarning*>::iterator it = CurrentWarnings.begin(); it != CurrentWarnings.end(); ++it) {
-		Texthook::Draw(400, 30 * (yOffset++), Center, 3, Red, "%s has expired!", (*it)->name.c_str());
+		Texthook::Draw(xpos, 30 * (yOffset++), Center, 3, Red, "%s has expired!", (*it)->name.c_str());
 	}
 
 	// It's a kludge to peek into other modules for config info, but it just seems silly to
 	// create a new UI tab for each module with config parameters.
-	if ((*BH::MiscToggles)["Quest Drop Warning"].state) {
-		char *bossNames[3] = {"Mephisto", "Diablo", "Baal"};
-		int xpac = pData->nCharFlags & PLAYER_TYPE_EXPANSION;
-		int doneDuriel = D2COMMON_GetQuestFlag2(quests, THE_SEVEN_TOMBS, QFLAG_REWARD_GRANTED);
-		int doneMephisto = D2COMMON_GetQuestFlag2(quests, THE_GUARDIAN, QFLAG_REWARD_GRANTED);
-		int doneDiablo = D2COMMON_GetQuestFlag2(quests, TERRORS_END, QFLAG_REWARD_GRANTED);
-		int doneBaal = D2COMMON_GetQuestFlag2(quests, EVE_OF_DESTRUCTION, QFLAG_REWARD_GRANTED);
-		int startedMephisto = D2COMMON_GetQuestFlag2(quests, THE_GUARDIAN, QFLAG_QUEST_STARTED);
-		int startedDiablo = D2COMMON_GetQuestFlag2(quests, TERRORS_END, QFLAG_QUEST_STARTED);
-		int startedBaal = D2COMMON_GetQuestFlag2(quests, EVE_OF_DESTRUCTION, QFLAG_QUEST_STARTED);
+	//if ((*BH::MiscToggles)["Quest Drop Warning"].state) {
+	//	char *bossNames[3] = {"Mephisto", "Diablo", "Baal"};
+	//	int xpac = pData->nCharFlags & PLAYER_TYPE_EXPANSION;
+	//	int doneDuriel = D2COMMON_GetQuestFlag2(quests, THE_SEVEN_TOMBS, QFLAG_REWARD_GRANTED);
+	//	int doneMephisto = D2COMMON_GetQuestFlag2(quests, THE_GUARDIAN, QFLAG_REWARD_GRANTED);
+	//	int doneDiablo = D2COMMON_GetQuestFlag2(quests, TERRORS_END, QFLAG_REWARD_GRANTED);
+	//	int doneBaal = D2COMMON_GetQuestFlag2(quests, EVE_OF_DESTRUCTION, QFLAG_REWARD_GRANTED);
+	//	int startedMephisto = D2COMMON_GetQuestFlag2(quests, THE_GUARDIAN, QFLAG_QUEST_STARTED);
+	//	int startedDiablo = D2COMMON_GetQuestFlag2(quests, TERRORS_END, QFLAG_QUEST_STARTED);
+	//	int startedBaal = D2COMMON_GetQuestFlag2(quests, EVE_OF_DESTRUCTION, QFLAG_QUEST_STARTED);
 
-		int warning = -1;
-		if (doneDuriel && startedMephisto && !doneMephisto && !MephistoBlocked) {
-			warning = 0;
-		} else if (doneMephisto && startedDiablo && !doneDiablo && !DiabloBlocked) {
-			warning = 1;
-		} else if (xpac && doneDiablo && startedBaal && !doneBaal && !BaalBlocked) {
-			warning = 2;
-		}
-		if (warning >= 0) {
-			ms = ticks - warningTicks;
-			if (ms > 2000) {
-				warningTicks = ticks;
-			} else if (ms > 500) {
-				Texthook::Draw(400, 30 * (yOffset++), Center, 3, Red, "%s Quest Active", bossNames[warning]);
-			}
-		}
-	}
+	//	int warning = -1;
+	//	if (doneDuriel && startedMephisto && !doneMephisto && !MephistoBlocked) {
+	//		warning = 0;
+	//	} else if (doneMephisto && startedDiablo && !doneDiablo && !DiabloBlocked) {
+	//		warning = 1;
+	//	} else if (xpac && doneDiablo && startedBaal && !doneBaal && !BaalBlocked) {
+	//		warning = 2;
+	//	}
+	//	if (warning >= 0) {
+	//		ms = ticks - warningTicks;
+	//		if (ms > 2000) {
+	//			warningTicks = ticks;
+	//		} else if (ms > 500) {
+	//			Texthook::Draw(400, 30 * (yOffset++), Center, 3, Red, "%s Quest Active", bossNames[warning]);
+	//		}
+	//	}
+	//}
 }
 
 void ScreenInfo::OnAutomapDraw() {
@@ -206,8 +212,9 @@ void ScreenInfo::OnAutomapDraw() {
 			else
 				key.replace(key.find("%" + automap[n].key + "%"), automap[n].key.length() + 2, automap[n].value);
 		}
-		if (key.length() > 0)
-			Texthook::Draw(790, (y+=16), Right,0,Gold,"%s", key.c_str());
+		if (key.length() > 0) {
+			Texthook::Draw(xpos, (y+=16), Right,0,Gold,"%s", key.c_str());
+		}
 	}
 
 	delete [] level;

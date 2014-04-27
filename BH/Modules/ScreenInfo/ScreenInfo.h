@@ -30,6 +30,7 @@ class ScreenInfo : public Module {
 		Drawing::Texthook* bhText;
 		DWORD gameTimer;
 
+		int xpos;
 		int packetRequests;
 		ULONGLONG warningTicks;
 		ULONGLONG packetTicks;
@@ -41,8 +42,9 @@ class ScreenInfo : public Module {
 		ScreenInfo() :
 			Module("Screen Info"), warningTicks(BHGetTickCount()), packetRequests(0),
 			MephistoBlocked(false), DiabloBlocked(false), BaalBlocked(false), ReceivedQuestPacket(false) {};
-
+					
 		void OnLoad();
+		void OnResolutionChanged(int newX, int newY);
 		void OnGameJoin(const string& name, const string& pass, int diff);
 		void OnGameExit();
 
@@ -54,3 +56,4 @@ class ScreenInfo : public Module {
 
 StateCode GetStateCode(unsigned int nKey);
 StateCode GetStateCode(const char* name);
+
