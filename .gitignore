@@ -28,6 +28,7 @@
 *.suo
 *.sdf
 *.opensdf
+*.cache
 
 *~
 *.swp

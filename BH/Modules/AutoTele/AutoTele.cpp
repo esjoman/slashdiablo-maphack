@@ -35,9 +35,18 @@ void AutoTele::OnLoad() {
 
 	new Texthook(settingsTab, 60, 12, "Toggles");
 
-	new Checkhook(settingsTab, 40, 27, &Toggles["Draw Destination"].state, "Draw Paths");
+	new Checkhook(settingsTab, 4, 27, &Toggles["Draw Destination"].state, "Draw Destination");
+	new Checkhook(settingsTab, 4, 42, &Toggles["Draw Path"].state, "Draw Path");
+	new Checkhook(settingsTab, 4, 57, &Toggles["Quest Drop Warning"].state, "Quest Drop Warning");
+	new Checkhook(settingsTab, 4, 72, &Toggles["Display Messages"].state, "Display Messages");
+	new Checkhook(settingsTab, 4, 87, &Toggles["Fast Teleport"].state, "Fast Teleport");
 
-	new Checkhook(settingsTab, 40, 57, &Toggles["Quest Drop Warning"].state, "Quest Drop Warning");
+	new Texthook(settingsTab, 160, 122, "Hotkeys");
+
+	new Keyhook(settingsTab, 4, 137, &NextKey, "Next Tele");
+	new Keyhook(settingsTab, 4, 152, &OtherKey, "Other Tele");
+	new Keyhook(settingsTab, 210, 137, &WPKey, "WP Tele");
+	new Keyhook(settingsTab, 210, 152, &PrevKey, "Prev Tele");
 
 	//this doesn't change the path.  I can't figure out how to make it work either.
 	//new Checkhook(settingsTab, 40, 42, &Toggles["CP to cave"].state, "CP to cave");
@@ -194,15 +203,31 @@ void AutoTele::OnLoop() {
 void AutoTele::OnKey(bool up, BYTE key, LPARAM lParam, bool* block) {
 	if (key == NextKey) 
 	{
+		*block = true;
+		if (!up)
+			return;
+		ManageTele(vVector[GetPlayerArea()*4+Next]);
 	} 
 	else if (key == OtherKey) 
 	{
+		*block = true;
+		if (!up)
+			return;
+		ManageTele(vVector[GetPlayerArea()*4+Other]);
 	} 
 	else if (key == WPKey) 
 	{
+		*block = true;
+		if (!up)
+			return;
+		ManageTele(vVector[GetPlayerArea()*4+WP]);
 	}
 	else if (key == PrevKey) 
 	{
+		*block = true;
+		if (!up)
+			return;
+		ManageTele(vVector[GetPlayerArea()*4+Prev]);
 	}
 }
 
@@ -212,18 +237,18 @@ void AutoTele::OnGamePacketRecv(BYTE* packet, bool* block) {
 		if(*(DWORD*)&packet[2] == D2CLIENT_GetPlayerUnit()->dwUnitId) {
 			packet[10] = 0;  
 
-			//if(Toggles["Fast Teleport"].state) {
-			//	UnitAny* Me = D2CLIENT_GetPlayerUnit();
+			if(Toggles["Fast Teleport"].state) {
+				UnitAny* Me = D2CLIENT_GetPlayerUnit();
 
-			//	if(Me->dwMode == PLAYER_MODE_DEATH || Me->dwMode == PLAYER_MODE_STAND_OUTTOWN ||
-			//		Me->dwMode == PLAYER_MODE_WALK_OUTTOWN || Me->dwMode == PLAYER_MODE_RUN || 
-			//		Me->dwMode == PLAYER_MODE_STAND_INTOWN || Me->dwMode == PLAYER_MODE_WALK_INTOWN ||
-			//		Me->dwMode == PLAYER_MODE_DEAD || Me->dwMode == PLAYER_MODE_SEQUENCE ||
-			//		Me->dwMode == PLAYER_MODE_BEING_KNOCKBACK)
-			//		return;
+				if(Me->dwMode == PLAYER_MODE_DEATH || Me->dwMode == PLAYER_MODE_STAND_OUTTOWN ||
+					Me->dwMode == PLAYER_MODE_WALK_OUTTOWN || Me->dwMode == PLAYER_MODE_RUN || 
+					Me->dwMode == PLAYER_MODE_STAND_INTOWN || Me->dwMode == PLAYER_MODE_WALK_INTOWN ||
+					Me->dwMode == PLAYER_MODE_DEAD || Me->dwMode == PLAYER_MODE_SEQUENCE ||
+					Me->dwMode == PLAYER_MODE_BEING_KNOCKBACK)
+					return;
 
-			//	Me->dwFrameRemain = 0;
-			//}
+				Me->dwFrameRemain = 0;
+			}
 		}
 	}
 	return;
